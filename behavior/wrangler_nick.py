@@ -39,15 +39,19 @@ class subjectDataWrangler():
         sub_rawData = pd.read_csv(sub_data_loc)
         # Select certain columns
         sub_data = sub_rawData[list(columnDatatype.keys())].copy(deep=True)
+
+        # Data cleansing
         # Map binary variables before assigning them (Be careful of mappings!)
         sub_data['stimHigh'] = sub_data['stimHigh'].map({2:1, 
                                                          1:0})
+                                                         
+        sub_data['switch'] = np.abs(np.append(0, np.diff(sub_data['responseKey'].map({4:1,1:0}))))
         self.subjectData = sub_data.astype(columnDatatype)
 
 # Sample uses of this function
-# sub = 8
-# #data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
-# data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
+sub = 6
+#data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
+data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
 
-# subjectData = subjectDataWrangler(sub, data_loc).subjectData
-# subjectData.plot(figsize=(24, 24), subplots=True, sharex=True)
+subjectData = subjectDataWrangler(sub, data_loc).subjectData
+subjectData.plot(figsize=(24, 24), subplots=True, sharex=True)

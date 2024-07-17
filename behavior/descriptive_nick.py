@@ -5,12 +5,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from scipy.optimize import curve_fit
-
 #data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
 data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
 exclude = [0,1,2,3,4,5,14,24,34,37] # Added 11, 12, 16, 17, 20, 23 for low block num
-sub = 8
+sampleSub = 8
 
 class block_stats():
     def __init__(self, subjectData):
@@ -53,40 +51,20 @@ class block_stats():
                 block_score[:len(arr),b] = arr
         self.block_score = block_score
 
-subjectData = subjectDataWrangler(sub, data_loc).subjectData
-block = block_stats(subjectData)
-plt.plot(np.nanmean(block.block_score, axis=1))
-plt.show()
 
-block_score_rl_agg = np.zeros((97, len(subjectData['block'])))+np.nan
-block_score_hm_agg = np.zeros((97, len(subjectData['block'])))+np.nan
-
-fig, ax = plt.subplots(2,1, sharex=True, sharey=True)
-for sub in range(97): 
-    if(sub not in exclude):     
-        # Data after 'wrangling'
-        subjectData = subjectDataWrangler(sub, data_loc).subjectData
-        block = block_stats(subjectData)
-        if(subjectData['instructCond'][0]=='rl'):
-            ax[0].plot(np.nanmean(block.block_score, axis=1), 'k', alpha=0.25)
-            block_score_rl_agg[sub,:len(block.block_score)] = np.nanmean(block.block_score, axis=1)
-            
-        else:
-            ax[1].plot(np.nanmean(block.block_score, axis=1), 'b', alpha=0.25)
-            block_score_hm_agg[sub,:len(block.block_score)] = np.nanmean(block.block_score, axis=1)
-
-fig, ax = plt.subplots(1,1, sharex=True, sharey=True)   
-plt.plot(np.nanmean(block_score_rl_agg, axis=0))
-plt.plot(np.nanmean(block_score_hm_agg, axis=0))
+# Show sample result
+subjectData = subjectDataWrangler(sampleSub, data_loc).subjectData
+sBlock = block_stats(subjectData)
 
 plt.figure(figsize=(20,8))
-plt.plot(block.highChosen, label='p(High Chosen)')
-plt.plot(block.isWin, label='p(isWin)')
+plt.plot(sBlock.highChosen, label='p(High Chosen)')
+plt.plot(sBlock.isWin, label='p(isWin)')
 plt.legend()
-plt.title('Single Subject Across all Trials for subject {}'.format(sub))
+plt.title('Single Subject Across all Trials for subject {}'.format(sBlock))
 plt.show()
 
-# plt.figure(figsize=(20,8) )
-# plt.plot(block.block_score, 'b')
-# plt.title('Single Subject Collapsed Across Block')
-# plt.show()
+plt.figure(figsize=(20,8))
+plt.plot(sBlock.block_score, 'r', alpha=0.5)
+plt.plot(np.nanmean(sBlock.block_score, axis=1),'k--')
+plt.title('Single Subject {} Collapsed Across Block'.format(sampleSub))
+plt.show()
