@@ -16,6 +16,8 @@ columnDatatype = {# Session Metadata
                   'stimHigh' : 'Int8',
                   'reverseTrial' : 'Int8',
                   'responseKey' : 'Int8',
+                  'selected_stim1' : 'Int8',
+                  'selected_stim2' : 'Int8',
                   'RT' : 'Float32',
 
                   # Trial Result Derivatives
@@ -50,8 +52,10 @@ class subjectDataWrangler():
 
 # Sample uses of this function
 sub = 6
-#data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
-data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
+data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
+#data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
 
-subjectData = subjectDataWrangler(sub, data_loc).subjectData
-subjectData.plot(figsize=(24, 24), subplots=True, sharex=True)
+def plot_function():
+    subjectData = subjectDataWrangler(sub, data_loc).subjectData
+    subjectData.plot(figsize=(24, 24), subplots=True, sharex=True)
+    plt.title('Sample data for subject {}'.format(sub))
