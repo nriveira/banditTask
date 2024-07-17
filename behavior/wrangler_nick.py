@@ -20,9 +20,9 @@ columnDatatype = {# Session Metadata
 
                   # Trial Result Derivatives
                   'highChosen' : 'Int8',
-                  'isWin' : 'boolean',
-                  'stim1_isWin' : 'boolean',
-                  'stim2_isWin' : 'boolean',
+                  'isWin' : 'Int8',
+                  'stim1_isWin' : 'Int8',
+                  'stim2_isWin' : 'Int8',
                   'payOut' : 'Float32',
                   'accum_payOut' : 'Float32'}
 
@@ -30,6 +30,8 @@ class subjectDataWrangler():
     def __init__(self, sub, data_loc):
         # Fix strings
         data_string = '/sub{}_data.csv'.format(sub)
+
+        # Will add onset string info later, not needed now
         onset_string = '/sub{}_onsets.csv'.format(sub)
         sub_data_loc = data_loc+data_string
 
@@ -45,10 +47,7 @@ class subjectDataWrangler():
 # Sample uses of this function
 # sub = 8
 # #data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
-# data_loc = 'C:/Users/nrive/Projects/banditTask/vince_code/csv' # For pc
+# data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
 
 # subjectData = subjectDataWrangler(sub, data_loc).subjectData
 # subjectData.plot(figsize=(24, 24), subplots=True, sharex=True)
-
-# for col in subjectData.columns:
-#     print(col, subjectData[col].unique())

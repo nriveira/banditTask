@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Index individual plots based on csv name format
 sub = 8
 #data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
-data_loc = 'C:/Users/nrive/Projects/banditTask/vince_code/csv' # For pc
+data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
 
 data_string = '/sub{}_data.csv'.format(sub)
 onset_string = '/sub{}_onsets.csv'.format(sub)
