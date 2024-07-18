@@ -10,18 +10,10 @@ sampleSub = 6
 win_size = 10
 
 # Figure 1
-plt.figure(figsize=(10,8))
 def subject_trials_to_thresh(sampleSub, data_loc):
     subjectData = subjectDataWrangler(sampleSub, data_loc).subjectData
     unique, counts = np.unique(subjectData['block'], return_counts=True)
     return unique, counts
-
-unique, counts = subject_trials_to_thresh(sampleSub, data_loc)
-plt.plot(unique, counts)
-plt.xlabel('Block Number')
-plt.ylabel('# Trials')
-plt.title('Trials per Block')
-plt.show()
 
 # Figure 2
 def subject_pHighChosen(sampleSub, data_loc, win_size):
@@ -33,16 +25,17 @@ def subject_pHighChosen(sampleSub, data_loc, win_size):
             rev_centered.append((np.array(subjectData['pHighChosen'][r-win_size:r+win_size+1])))
     return rev_centered
 
-rev_centered = subject_pHighChosen(sampleSub, data_loc, win_size)
-plt.figure(figsize=(10,8))
-for r in rev_centered:
-    plt.plot(np.arange(-win_size,win_size+1),r)
-plt.plot(np.arange(-win_size,win_size+1), np.array(rev_centered).mean(axis=0), 'b--')
-plt.axvline(0, color='k')
-plt.xlabel('Trials to Reversal')
-plt.ylabel('aggregated p(highChosen)')
-plt.title('highChosen Probability')
-plt.show()
+def subject_pHighGivenB(sampleSub, data_loc, win_size):
+    subjectData = subjectDataWrangler(sampleSub, data_loc).subjectData
+    rev = np.where(subjectData['reverseTrial']==1)[0]
+    rev_stim = []
+    for r in rev:
+        if((r-win_size > 0) and (r+win_size < len(subjectData['highChosen']))):
+            if(subjectData['stimHigh'][r+1] == 1):
+                rev_stim.append((np.array(subjectData['pHighChosen'][r-win_size:r+win_size+1])))
+            elif(subjectData['stimHigh'][r+1] == 0):
+                rev_stim.append((1-np.array(subjectData['pHighChosen'][r-win_size:r+win_size+1])))
+    return rev_stim
 
 # Figure 4
 def subject_pSwitch(sampleSub, data_loc, win_size):
@@ -54,8 +47,44 @@ def subject_pSwitch(sampleSub, data_loc, win_size):
             rev_centered.append((np.array(subjectData['pSwitch'][r-win_size:r+win_size+1])))
     return rev_centered
 
-rev_centered = subject_pSwitch(sampleSub, data_loc, win_size)
+
+# Plotting
+# Figure 1
 plt.figure(figsize=(10,8))
+unique, counts = subject_trials_to_thresh(sampleSub, data_loc)
+plt.plot(unique, counts)
+plt.xlabel('Block Number')
+plt.ylabel('# Trials')
+plt.title('Trials per Block')
+plt.show()
+
+# Figure 2
+plt.figure(figsize=(10,8))
+rev_centered = subject_pHighChosen(sampleSub, data_loc, win_size)
+for r in rev_centered:
+    plt.plot(np.arange(-win_size,win_size+1),r)
+plt.plot(np.arange(-win_size,win_size+1), np.array(rev_centered).mean(axis=0), 'b--')
+plt.axvline(0, color='k')
+plt.xlabel('Trials to Reversal')
+plt.ylabel('aggregated p(highChosen)')
+plt.title('highChosen Probability')
+plt.show()
+
+# Figure 3
+plt.figure(figsize=(10,8))
+rev_cond = subject_pHighGivenB(sampleSub, data_loc, win_size)
+for r in rev_cond:
+    plt.plot(np.arange(-win_size,win_size+1),r)
+plt.plot(np.arange(-win_size,win_size+1), np.array(rev_cond).mean(axis=0), 'b--')
+plt.axvline(0, color='k')
+plt.xlabel('Trials to Reversal')
+plt.ylabel('p(highChosen|B High)')
+plt.title('probability given B')
+plt.show()
+
+# Figure 4
+plt.figure(figsize=(10,8))
+rev_centered = subject_pSwitch(sampleSub, data_loc, win_size)
 for r in rev_centered:
     plt.plot(np.arange(-win_size,win_size+1),r)
 plt.plot(np.arange(-win_size,win_size+1), np.array(rev_centered).mean(axis=0), 'b--')

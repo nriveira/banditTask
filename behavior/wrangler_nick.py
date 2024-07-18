@@ -49,7 +49,7 @@ class subjectDataWrangler():
         sub_data['stimHigh'] = sub_data['stimHigh'].map({2:1, 
                                                          1:0})
                                                          
-        sub_data['pHighChosen'], _ = exp_mov_ave(sub_data['highChosen'])
+        sub_data['pHighChosen'], _ = exp_mov_ave(sub_data['highChosen'], initValue=sub_data['highChosen'][0])
         sub_data['switch'] = np.abs(np.append(0, np.diff(sub_data['responseKey'].map({4:1,1:0}))))
         sub_data['pSwitch'] = smp_mov_ave(sub_data['switch'])
         self.subjectData = sub_data.astype(columnDatatype)

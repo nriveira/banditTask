@@ -10,6 +10,7 @@ def exp_mov_ave(data, tau = 8, initValue = 0.5, alpha = None):
     if not alpha: alpha = 1. - np.exp(-1./tau)
     mov_ave = np.zeros(np.size(data)+1)
     mov_ave[0] = initValue
+
     for i, x in enumerate(data):
         if not np.isnan(x):
             mov_ave[i+1] = (1.-alpha)*mov_ave[i] + alpha*x 
