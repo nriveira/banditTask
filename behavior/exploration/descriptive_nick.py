@@ -41,7 +41,7 @@ class block_stats():
         block_score = np.zeros((np.max(subjectData['blockTrialNo']), np.max(subjectData['block'])))+np.nan
         for b in range(np.max(subjectData['block'])):
                 arr = self.highChosen[subjectData['block']==(b+1)]
-                block_score[:len(arr),b] = arr
+                block_score[:len(arr),b] = np.divide(arr, np.arange(1, len(arr)+1))
         self.block_score = block_score
 
 

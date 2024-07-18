@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from utilities import exp_mov_ave, smp_mov_ave
+
 # Index individual plots based on csv name format
 
 columnDatatype = {# Session Metadata
@@ -47,15 +49,16 @@ class subjectDataWrangler():
         sub_data['stimHigh'] = sub_data['stimHigh'].map({2:1, 
                                                          1:0})
                                                          
+        sub_data['pHighChosen'], _ = exp_mov_ave(sub_data['highChosen'])
         sub_data['switch'] = np.abs(np.append(0, np.diff(sub_data['responseKey'].map({4:1,1:0}))))
+        sub_data['pSwitch'] = smp_mov_ave(sub_data['switch'])
         self.subjectData = sub_data.astype(columnDatatype)
 
 # Sample uses of this function
-sub = 6
+sub = 8
 data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
 #data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
 
 def plot_function():
     subjectData = subjectDataWrangler(sub, data_loc).subjectData
     subjectData.plot(figsize=(24, 24), subplots=True, sharex=True)
-    plt.title('Sample data for subject {}'.format(sub))

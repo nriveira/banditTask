@@ -8,13 +8,12 @@ import matplotlib.pyplot as plt
 data_loc = r'/Users/nick/Projects/ODoherty/vince_data/csv' # For mac
 #data_loc = 'C:/Users/nrive/Projects/banditTask/vince_data/csv' # For pc
 exclude = [0,1,2,3,4,5,14,24,34,37] # Added 11, 12, 16, 17, 20, 23 for low block num
-sampleSub = 8
+sampleSub = 6
 
 class block_condStats():
     def __init__(self, subjectData):
         self.subjectData = subjectData
         self.get_cond_probs() # Get trial fits for each subject
-        # self.get_block_agg() # Get aggregate data of all blocks
 
     def get_cond_probs(self):
         # Block reset statistics 
@@ -27,12 +26,11 @@ class block_condStats():
         last_rev = 0
         for i,r in enumerate(rev):
             condTrials = subjectData['highChosen'][last_rev:r+1].dropna()
-            exp_ct, _ = exp_mov_ave(condTrials.cumsum())
+            exp_ct, _ = exp_mov_ave(condTrials)
 
             highChosenCond[:len(exp_ct),i] = exp_ct
             highChosenCond[len(exp_ct):,i] = np.nan
             stimHigh[i] = subjectData['stimHigh'][last_rev]
-            
             last_rev = r+1
 
         self.condProb = highChosenCond
