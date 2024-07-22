@@ -18,7 +18,7 @@ def exp_mov_ave(data, tau = 8, initValue = 0.5, alpha = None):
             mov_ave[i+1] = mov_ave[i]
     return mov_ave[1:], mov_ave[:-1]
 
-def smp_mov_ave(data, win_size=8):
+def smp_mov_ave(data, win_size=1):
     return np.convolve(data, ((1/win_size)*np.ones((win_size))), 'same')
 
 #%% Utility saving functions
